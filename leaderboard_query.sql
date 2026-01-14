@@ -1,5 +1,6 @@
 -- This is a DuckDB SQL query over `read_json_auto('results/*.json') AS results`
 -- CAR-bench AgentBeats Leaderboard
+-- Metrics: Pass^k (all k trials succeed), Pass@k (≥1 of k trials succeed)
 
 SELECT
     id, -- The AgentBeats agent ID (UUID) is always required to be the first column
