@@ -4,8 +4,9 @@
 
 SELECT
     id, -- The AgentBeats agent ID (UUID) is always required to be the first column
+    submission_num AS "#",
     -- Overall score (sort key)
-    COALESCE(CAST(ROUND(avg_pass_power_3 * 100, 0) AS VARCHAR), '-') AS "Overall Pass^3",
+    COALESCE(CAST(ROUND(pass_power_3 * 100, 0) AS VARCHAR), '-') AS "Overall Pass^3",
     -- BASE
     CAST(ROUND(base_pass_power_1 * 100, 0) AS VARCHAR) AS "Base Pass^1",
     COALESCE(CAST(ROUND(base_pass_power_3 * 100, 0) AS VARCHAR), '-') AS "Base Pass^3",
@@ -23,25 +24,25 @@ SELECT
 FROM ( -- The AgentBeats app automatically reads the JSON results into this table
     SELECT
         CAST(results.participants.agent AS VARCHAR) AS id,
-        -- Overall average Pass^3 (primary sort key)
-        AVG(res.pass_power_k_scores."Pass^3") AS avg_pass_power_3,
+        ROW_NUMBER() OVER (PARTITION BY results.participants.agent ORDER BY res.pass_power_k_scores."Pass^3" DESC) AS submission_num,
+        -- Overall Pass^3 (primary sort key)
+        res.pass_power_k_scores."Pass^3" AS pass_power_3,
         -- Time
-        AVG(res.time_used) AS time_used,
+        res.time_used AS time_used,
         -- Base split metrics
-        AVG(res.pass_power_k_scores_by_split.base."Pass^1") AS base_pass_power_1,
-        AVG(res.pass_power_k_scores_by_split.base."Pass^3") AS base_pass_power_3,
-        AVG(res.pass_at_k_scores_by_split.base."Pass@3") AS base_pass_at_3,
+        res.pass_power_k_scores_by_split.base."Pass^1" AS base_pass_power_1,
+        res.pass_power_k_scores_by_split.base."Pass^3" AS base_pass_power_3,
+        res.pass_at_k_scores_by_split.base."Pass@3" AS base_pass_at_3,
         -- Hallucination split metrics
-        AVG(res.pass_power_k_scores_by_split.hallucination."Pass^1") AS hall_pass_power_1,
-        AVG(res.pass_power_k_scores_by_split.hallucination."Pass^3") AS hall_pass_power_3,
-        AVG(res.pass_at_k_scores_by_split.hallucination."Pass@3") AS hall_pass_at_3,
+        res.pass_power_k_scores_by_split.hallucination."Pass^1" AS hall_pass_power_1,
+        res.pass_power_k_scores_by_split.hallucination."Pass^3" AS hall_pass_power_3,
+        res.pass_at_k_scores_by_split.hallucination."Pass@3" AS hall_pass_at_3,
         -- Disambiguation split metrics
-        AVG(res.pass_power_k_scores_by_split.disambiguation."Pass^1") AS dis_pass_power_1,
-        AVG(res.pass_power_k_scores_by_split.disambiguation."Pass^3") AS dis_pass_power_3,
-        AVG(res.pass_at_k_scores_by_split.disambiguation."Pass@3") AS dis_pass_at_3
+        res.pass_power_k_scores_by_split.disambiguation."Pass^1" AS dis_pass_power_1,
+        res.pass_power_k_scores_by_split.disambiguation."Pass^3" AS dis_pass_power_3,
+        res.pass_at_k_scores_by_split.disambiguation."Pass@3" AS dis_pass_at_3
     FROM results
     CROSS JOIN UNNEST(results.results) AS r(res)
     WHERE results.participants.agent IS NOT NULL
-    GROUP BY CAST(results.participants.agent AS VARCHAR)
 ) AS agent_metrics
-ORDER BY avg_pass_power_3 DESC;
+ORDER BY pass_power_3 DESC;
