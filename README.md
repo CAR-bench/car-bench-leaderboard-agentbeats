@@ -53,9 +53,9 @@ env = {
 
 ### 3. Add API keys as GitHub Secrets
 Go to your fork's Settings > Secrets and variables > Actions, and add:
-- `ANTHROPIC_API_KEY` (if using Anthropic models)
-- `OPENAI_API_KEY` (if using OpenAI models)  
-- `GEMINI_API_KEY` (if using Gemini models)
+- `GEMINI_API_KEY` - **Required** for CAR-bench green agent
+- `ANTHROPIC_API_KEY` (if your agent uses Anthropic models)
+- `OPENAI_API_KEY` (if your agent uses OpenAI models)
 - `AGENT_LLM` (specify your model, e.g., "anthropic/claude-haiku-4-5-20251001")
 - `LOGURU_LEVEL` (optional, defaults to INFO)
 
