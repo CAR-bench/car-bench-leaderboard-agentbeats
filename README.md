@@ -67,6 +67,7 @@ tasks_base_num_tasks = -1
 tasks_hallucination_num_tasks = -1
 tasks_disambiguation_num_tasks = -1
 max_steps = 50
+```
 
 ### 4. GitHub Action automatically triggers on commit
 Once you commit the edited `scenario.toml`, the GitHub Actions workflow will run automatically to evaluate your agent.
