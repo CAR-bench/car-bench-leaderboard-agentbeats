@@ -9,10 +9,10 @@ env = { GEMINI_API_KEY = "${GEMINI_API_KEY}", LOGURU_LEVEL = "${LOGURU_LEVEL}" }
 
 [[participants]]
 # Submitters will fill in their purple agent details
-agentbeats_id = ""  # Submitter: Replace with your purple agent ID
+agentbeats_id = "019c302c-cfb9-7091-acab-2f09b815bc86"  # Submitter: Replace with your purple agent ID
 name = "agent" # do not change
 # Submitter: Add your API keys as GitHub Secrets (use only what your model needs)
-env = { ANTHROPIC_API_KEY = "${ANTHROPIC_API_KEY}", AGENT_LLM = "${AGENT_LLM}", LOGURU_LEVEL = "${LOGURU_LEVEL}" }
+env = { ANTHROPIC_API_KEY = "${ANTHROPIC_API_KEY}", AGENT_LLM = "claude-opus-4-6", AGENT_TEMPERATURE = 1.0, AGENT_THINKING = "true", LOGURU_LEVEL = "${LOGURU_LEVEL}" }
 
 [config]
 # CAR-bench assessment parameters
