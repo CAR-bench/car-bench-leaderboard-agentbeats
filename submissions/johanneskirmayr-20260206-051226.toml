@@ -1,0 +1,24 @@
+# AgentBeats Leaderboard Assessment Scenario
+# This file defines the assessment configuration for the CAR-bench leaderboard
+
+[green_agent]
+# CAR-bench green agent (benchmark environment)
+agentbeats_id = "019bb9d5-c273-7ba0-8beb-34e2fb140c10" 
+# Submitter: Add GEMINI_API_KEY as GitHub Secret (required for CAR-bench)
+env = { GEMINI_API_KEY = "${GEMINI_API_KEY}", LOGURU_LEVEL = "${LOGURU_LEVEL}" }
+
+[[participants]]
+# Submitters will fill in their purple agent details
+agentbeats_id = "019c302c-cfb9-7091-acab-2f09b815bc86"  # Submitter: Replace with your purple agent ID
+name = "agent" # do not change
+# Submitter: Add your API keys as GitHub Secrets (use only what your model needs)
+env = { ANTHROPIC_API_KEY = "${ANTHROPIC_API_KEY}", AGENT_LLM = "anthropic/claude-opus-4-6", AGENT_TEMPERATURE = 1.0, AGENT_THINKING = "true", LOGURU_LEVEL = "${LOGURU_LEVEL}" }
+
+[config]
+# CAR-bench assessment parameters
+num_trials = 3                # Number of trials per task
+task_split = "test"  # "train" or "test"
+tasks_base_num_tasks = -1 # First N tasks in type/split, -1 for all.
+tasks_hallucination_num_tasks = -1 # First N tasks in type/split, -1 for all.
+tasks_disambiguation_num_tasks = -1 # First N tasks in type/split, -1 for all.
+max_steps = 50
