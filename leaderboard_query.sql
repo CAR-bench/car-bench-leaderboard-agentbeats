@@ -4,7 +4,19 @@
 
 SELECT
     id, -- The AgentBeats agent ID (UUID) is always required to be the first column
-    submission_num AS "#",
+    -- Rank with ordinal suffix
+    CONCAT(
+        CAST(ROW_NUMBER() OVER (ORDER BY pass_power_3 DESC) AS VARCHAR),
+        CASE 
+            WHEN ROW_NUMBER() OVER (ORDER BY pass_power_3 DESC) % 100 IN (11, 12, 13) THEN 'th'
+            WHEN ROW_NUMBER() OVER (ORDER BY pass_power_3 DESC) % 10 = 1 THEN 'st'
+            WHEN ROW_NUMBER() OVER (ORDER BY pass_power_3 DESC) % 10 = 2 THEN 'nd'
+            WHEN ROW_NUMBER() OVER (ORDER BY pass_power_3 DESC) % 10 = 3 THEN 'rd'
+            ELSE 'th'
+        END
+    ) AS "Rank",
+    -- Show submission number to indicate multiple runs
+    CONCAT('(#', CAST(submission_num AS VARCHAR), ')') AS "Run",
     -- Overall score (sort key)
     COALESCE(LTRIM(PRINTF('%.2f', pass_power_3), '0'), '-') AS "Overall Pass^3",
     -- BASE
